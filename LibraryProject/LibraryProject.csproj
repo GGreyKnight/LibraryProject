@@ -36,6 +36,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Biblioteka">
+      <HintPath>..\Biblioteka\bin\Debug\Biblioteka.dll</HintPath>
+    </Reference>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.123\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -44,6 +50,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.115.5, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.115.5\lib\net46\System.Data.SQLite.dll</HintPath>
@@ -65,39 +72,39 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BooksManagementForm.cs">
+    <Compile Include="Forms\BooksManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BooksManagementForm.Designer.cs">
+    <Compile Include="Forms\BooksManagementForm.Designer.cs">
       <DependentUpon>BooksManagementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="BorrowBookManagementForm.cs">
+    <Compile Include="Forms\BorrowBookManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="BorrowBookManagementForm.Designer.cs">
+    <Compile Include="Forms\BorrowBookManagementForm.Designer.cs">
       <DependentUpon>BorrowBookManagementForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="MenuForm.cs">
+    <Compile Include="Forms\MenuForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MenuForm.Designer.cs">
+    <Compile Include="Forms\MenuForm.Designer.cs">
       <DependentUpon>MenuForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UsersManagementForm.cs">
+    <Compile Include="Forms\UsersManagementForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="UsersManagementForm.Designer.cs">
+    <Compile Include="Forms\UsersManagementForm.Designer.cs">
       <DependentUpon>UsersManagementForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="BooksManagementForm.resx">
+    <EmbeddedResource Include="Forms\BooksManagementForm.resx">
       <DependentUpon>BooksManagementForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="BorrowBookManagementForm.resx">
+    <EmbeddedResource Include="Forms\BorrowBookManagementForm.resx">
       <DependentUpon>BorrowBookManagementForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MenuForm.resx">
+    <EmbeddedResource Include="Forms\MenuForm.resx">
       <DependentUpon>MenuForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -109,12 +116,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Forms\UsersManagementForm.resx">
+      <DependentUpon>UsersManagementForm.cs</DependentUpon>
+    </EmbeddedResource>
     <Content Include="libraryDB.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EmbeddedResource Include="UsersManagementForm.resx">
-      <DependentUpon>UsersManagementForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

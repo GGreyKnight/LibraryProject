@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Biblioteka;
 
 namespace LibraryProject
 {
@@ -16,6 +17,7 @@ namespace LibraryProject
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            ConnectionString.setConnectionString(@"Data Source=.\libraryDB.db;Version=3");
             Application.Run(new MenuForm());
         }
     }
