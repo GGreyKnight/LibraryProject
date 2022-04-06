@@ -32,7 +32,7 @@ namespace LibraryProject
         private void BorrowBookManagementForm_Load(object sender, EventArgs e)
         {
             Member.ShowMembers(usersTable);
-            Book.ShowBooks(booksTable);
+            Book.ShowBooksAvaiilableNow(booksTable);
             BorrowBook.ShowBooksBorrow(borrowsTable);
         }
 
@@ -94,33 +94,72 @@ namespace LibraryProject
             }
             catch (Exception)
             {
-                MessageBox.Show("Niepełne dane! Proszę wybrać osobę i książkę w celu wyporzyczenia.");
+                MessageBox.Show("Niepełne dane! Proszę wybrać osobę i książkę w celu wypożyczenia.");
                 return;
             }
 
             BorrowBook.ShowBooksBorrow(borrowsTable);
-            Book.ShowBooks(booksTable);
+            Book.ShowBooksAvaiilableNow(booksTable);
+        }
+
+        private void clearTextBoxes(List<TextBox> textBoxes)
+        {
+            foreach(TextBox textBox in textBoxes)
+            {
+                textBox.Clear();
+            }
         }
 
         private void selectBooksBorrows(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (usersTable.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
+                if (borrowsTable.Rows[e.RowIndex].Cells[e.ColumnIndex].Value != null)
                 {
                     borrowsTable.CurrentRow.Selected = true;
-                    peselTextBox.Text = usersTable.Rows[e.RowIndex].Cells["pesel"].FormattedValue.ToString();
-                    positionTextBox.Text = usersTable.Rows[e.RowIndex].Cells["id_position"].FormattedValue.ToString();
-                    firstNameTextBox.Text = usersTable.Rows[e.RowIndex].Cells["first_name"].FormattedValue.ToString();
-                    lastNameTextBox.Text = usersTable.Rows[e.RowIndex].Cells["last_name"].FormattedValue.ToString();
-                    titleTextBox.Text = booksTable.Rows[e.RowIndex].Cells["title"].FormattedValue.ToString();
-                    authorTextBox.Text = booksTable.Rows[e.RowIndex].Cells["author"].FormattedValue.ToString();
-                    publisherTextBox.Text = booksTable.Rows[e.RowIndex].Cells["publisher"].FormattedValue.ToString();
-                    sectionTextBox.Text = booksTable.Rows[e.RowIndex].Cells["section"].FormattedValue.ToString();
+                    borrowMemberIdTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["id_member"].FormattedValue.ToString();
+                    borrowBookIdTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["id_book"].FormattedValue.ToString();
+                    borrowMemberPositionTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["position_member"].FormattedValue.ToString();
+                    borrowMemberFirstNameTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["first_name_member"].FormattedValue.ToString();
+                    borrowMemberLastNameTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["last_name_member"].FormattedValue.ToString();
+                    borrowBookTitleTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["title_book"].FormattedValue.ToString();
+                    borrowBookAuthorTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["author_book"].FormattedValue.ToString();
+                    borrowDateFromTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["borrow_date"].FormattedValue.ToString();
+                    borrowDateToTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["return_date"].FormattedValue.ToString();
+                    borrowDateCreatedTextBox.Text = borrowsTable.Rows[e.RowIndex].Cells["created_at"].FormattedValue.ToString();
                 }
             }
             catch (Exception)
             {
+                return;
+            }
+        }
+
+        private void returnBookButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                BorrowBook.DeleteBorrowBook(borrowMemberIdTextBox.Text, borrowBookIdTextBox.Text, borrowDateCreatedTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Niepełne dane! Proszę wybrać wypożyczenie do zwrotu z tabeli wypożyczeń.");
+                return;
+            }
+            clearTextBoxes(new List<TextBox> { borrowMemberIdTextBox, borrowBookIdTextBox, borrowMemberPositionTextBox, borrowMemberFirstNameTextBox, borrowMemberLastNameTextBox, borrowBookTitleTextBox, borrowBookAuthorTextBox, borrowDateFromTextBox, borrowDateToTextBox, borrowDateCreatedTextBox });
+            BorrowBook.ShowBooksBorrow(borrowsTable);
+            Book.ShowBooksAvaiilableNow(booksTable);
+        }
+
+        private void calculatePenaltyButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                penaltyTextBox.Text = BorrowBook.CalculatePenaltyForSelectedBorrow(borrowMemberIdTextBox.Text, borrowBookIdTextBox.Text, borrowDateCreatedTextBox.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Niepełne dane! Proszę wybrać wypożyczenie do zwrotu z tabeli wypożyczeń.");
                 return;
             }
         }

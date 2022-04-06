@@ -38,7 +38,7 @@ namespace Biblioteka
             var connection = new SQLiteConnection(ConnectionString.connectionString);
             connection.Open();
 
-            string sqlCommand = $"SELECT * FROM books where deleted_at IS NULL";
+            string sqlCommand = $"SELECT * FROM books WHERE deleted_at IS NULL";
             var command = new SQLiteCommand(sqlCommand, connection);
 
             SQLiteDataReader dataReader = command.ExecuteReader();
@@ -88,11 +88,9 @@ namespace Biblioteka
                 {
                     try
                     {
-                        command.CommandText = $"UPDATE books SET updated_at=@updated_at, deleted_at=null, quantity=@quantity, quantity_available=@quantity_available where id=@id";
-                        command.Parameters.AddWithValue("@id", Convert.ToUInt64(GetBookID(book)));
+                        command.CommandText = $"UPDATE books SET updated_at=@updated_at, deleted_at=null where id=@id";
+                        command.Parameters.AddWithValue("@id", GetBookID(book));
                         command.Parameters.AddWithValue("@updated_at", book.updated_at);
-                        command.Parameters.AddWithValue("@quantity", book.quantity);
-                        command.Parameters.AddWithValue("@quantity_available", book.quantity_available);
                         command.ExecuteNonQuery();
                     }
                     catch (Exception)
@@ -113,7 +111,7 @@ namespace Biblioteka
         public static string GetBookID(Book book)
         {
             var connection = new SQLiteConnection(ConnectionString.connectionString);
-            string sqlCommand = $"SELECT id FROM books where (title=@title AND author=@author AND publisher=@publisher AND section=@section)";
+            string sqlCommand = $"SELECT id FROM books WHERE (title=@title AND author=@author AND publisher=@publisher AND section=@section)";
 
             var command = new SQLiteCommand(sqlCommand, connection);
 
@@ -147,7 +145,7 @@ namespace Biblioteka
 
                 try
                 {
-                    command.CommandText = "UPDATE books SET title=@title, author=@author, publisher=@publisher, section=@section, quantity=@quantity, quantity_available=@quantity_available, updated_at=@updated_at where id=@id";
+                    command.CommandText = "UPDATE books SET title=@title, author=@author, publisher=@publisher, section=@section, quantity=@quantity, quantity_available=@quantity_available, updated_at=@updated_at WHERE id=@id";
 
                     command.Parameters.AddWithValue("@id", id_book);
                     command.Parameters.AddWithValue("@title", book.title);
@@ -183,16 +181,14 @@ namespace Biblioteka
 
                 var command = new SQLiteCommand(connection);
 
-                ulong book_id = Convert.ToUInt64(GetBookID(book));
-
                 try
                 {
                     /*instead of deleting, we ad delete_at value
                     delete would look like:
                     command.CommandText = $"DELETE FROM books where id={id_book}";
                     but this can ruin our database if we delete member who has book actually*/
-                    command.CommandText = $"UPDATE books SET updated_at=@updated_at, deleted_at=@deleted_at where id=@id";
-                    command.Parameters.AddWithValue("@id", book_id);
+                    command.CommandText = $"UPDATE books SET updated_at=@updated_at, deleted_at=@deleted_at WHERE id=@id";
+                    command.Parameters.AddWithValue("@id", GetBookID(book));
                     command.Parameters.AddWithValue("@deleted_at", DateTime.Now.ToString());
                     command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString());
                     command.ExecuteNonQuery();
@@ -215,7 +211,7 @@ namespace Biblioteka
                 var connection = new SQLiteConnection(ConnectionString.connectionString);
 
                 keyword = string.Format($"'%{keyword}%'");
-                string sqlCommand = $"SELECT * FROM books where title LIKE {keyword} OR author LIKE {keyword} OR publisher LIKE {keyword} OR section LIKE {keyword} ORDER BY id ASC";
+                string sqlCommand = $"SELECT * FROM books WHERE title LIKE {keyword} OR author LIKE {keyword} OR publisher LIKE {keyword} OR section LIKE {keyword} ORDER BY id ASC";
                 var command = new SQLiteCommand(sqlCommand, connection);
 
                 connection.Open();
@@ -236,19 +232,147 @@ namespace Biblioteka
             }
         }
 
-        public static ulong booksLeftInLibrary(Book book)
+        public static ulong BooksLeftInLibrary(Book book)
         {
-            return 0;
+            var connection = new SQLiteConnection(ConnectionString.connectionString);
+            string sqlCommand = $"SELECT quantity_available FROM books WHERE id=@id";
+
+            var command = new SQLiteCommand(sqlCommand, connection);
+
+            command.Parameters.AddWithValue("@id", GetBookID(book));
+
+            connection.Open();
+
+            SQLiteDataReader dataReader = command.ExecuteReader();
+            ulong booksLeft = 0;
+            while (dataReader.Read())
+            {
+                booksLeft = Convert.ToUInt64(dataReader[0].ToString());
+            }
+
+            connection.Close();
+
+            return booksLeft;
         }
 
-        public static void takeBookFromLibrary(Book book)
+        public static ulong BooksLeftInLibrary(string book_id)
         {
+            var connection = new SQLiteConnection(ConnectionString.connectionString);
+            string sqlCommand = $"SELECT quantity_available FROM books WHERE id=@id";
 
+            var command = new SQLiteCommand(sqlCommand, connection);
+
+            command.Parameters.AddWithValue("@id", book_id);
+
+            connection.Open();
+
+            SQLiteDataReader dataReader = command.ExecuteReader();
+            ulong booksLeft = 0;
+            while (dataReader.Read())
+            {
+                booksLeft = Convert.ToUInt64(dataReader[0].ToString());
+            }
+
+            connection.Close();
+
+            return booksLeft;
         }
 
-        public static void returnBookToLibrary(Book book)
+        public static ulong BooksTotalNumber(string book_id)
         {
+            var connection = new SQLiteConnection(ConnectionString.connectionString);
+            string sqlCommand = $"SELECT quantity FROM books WHERE id=@id";
 
+            var command = new SQLiteCommand(sqlCommand, connection);
+
+            command.Parameters.AddWithValue("@id", book_id);
+
+            connection.Open();
+
+            SQLiteDataReader dataReader = command.ExecuteReader();
+            ulong booksTotalNumber = 0;
+            while (dataReader.Read())
+            {
+                booksTotalNumber = Convert.ToUInt64(dataReader[0].ToString());
+            }
+
+            connection.Close();
+
+            return booksTotalNumber;
+        }
+
+        public static void ShowBooksAvaiilableNow(DataGridView dataGridView)
+        {
+            var connection = new SQLiteConnection(ConnectionString.connectionString);
+            connection.Open();
+
+            string sqlCommand = $"SELECT * FROM books where (deleted_at IS NULL AND quantity_available > 0)";
+            var command = new SQLiteCommand(sqlCommand, connection);
+
+            SQLiteDataReader dataReader = command.ExecuteReader();
+
+            dataGridView.Rows.Clear();
+            while (dataReader.Read())
+            {
+                dataGridView.Rows.Insert(0, dataReader.GetInt64(0), dataReader.GetString(1), dataReader.GetString(2), dataReader.GetString(3), dataReader.GetString(4), dataReader.GetInt64(5), dataReader.GetInt64(6), dataReader.GetString(7), dataReader.GetString(8));
+            }
+
+            connection.Close();
+        }
+
+        public static void TakeBookFromLibrary(Book book)
+        {
+            if(BooksLeftInLibrary(book) > 0)
+            {
+                var connection = new SQLiteConnection(ConnectionString.connectionString);
+                connection.Open();
+
+                var command = new SQLiteCommand(connection);
+
+                try
+                {
+                    command.CommandText = $"UPDATE books SET quantity_available = quantity_available - 1, updated_at=@updated_at WHERE id=@id";
+                    command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString());
+                    command.Parameters.AddWithValue("@id", GetBookID(book));
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Wszystkie egzemplarze wybranej pozycji są aktualnie niedostępne!");
+            }
+        }
+
+        public static void ReturnBookToLibrary(string book_id)
+        {
+            if(!String.IsNullOrEmpty(book_id) && (BooksLeftInLibrary(book_id) < BooksTotalNumber(book_id)))
+            {
+                var connection = new SQLiteConnection(ConnectionString.connectionString);
+                connection.Open();
+
+                var command = new SQLiteCommand(connection);
+
+                try
+                {
+                    command.CommandText = $"UPDATE books SET quantity_available = quantity_available + 1, updated_at=@updated_at WHERE id=@id";
+                    command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString());
+                    command.Parameters.AddWithValue("@id", book_id);
+                    command.ExecuteNonQuery();
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show("Takie wypożyczenie nie istnieje, zwrot niemożliwy do wykonania!");
+            }
+            
         }
     }
 }

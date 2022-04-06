@@ -46,7 +46,7 @@ namespace Biblioteka
             var connection = new SQLiteConnection(ConnectionString.connectionString);
             connection.Open();
 
-            string sqlCommand = $"SELECT * FROM members where deleted_at IS NULL";
+            string sqlCommand = $"SELECT * FROM members WHERE deleted_at IS NULL";
             var command = new SQLiteCommand(sqlCommand, connection);
 
             SQLiteDataReader dataReader = command.ExecuteReader();
@@ -88,7 +88,7 @@ namespace Biblioteka
                 {
                     try
                     {
-                        command.CommandText = $"UPDATE members SET updated_at=@updated_at, deleted_at=null where PESEL=@PESEL";
+                        command.CommandText = $"UPDATE members SET updated_at=@updated_at, deleted_at=null WHERE PESEL=@PESEL";
                         command.Parameters.AddWithValue("@PESEL", member.pesel_number);
                         command.Parameters.AddWithValue("@updated_at", member.updated_at);
                         command.ExecuteNonQuery();
@@ -119,7 +119,7 @@ namespace Biblioteka
 
                 try
                 {
-                    command.CommandText = "UPDATE members SET position_name=@position_name, first_name=@first_name, last_name=@last_name, updated_at=@updated_at where PESEL=@PESEL";
+                    command.CommandText = "UPDATE members SET position_name=@position_name, first_name=@first_name, last_name=@last_name, updated_at=@updated_at WHERE PESEL=@PESEL";
 
                     switch (CheckPosition(member))
                     {
@@ -184,6 +184,26 @@ namespace Biblioteka
             return position;
         }
 
+        public static string CheckPosition(string member_id)
+        {
+            var connection = new SQLiteConnection(ConnectionString.connectionString);
+            string sqlCommand = $"SELECT position_name FROM members WHERE id={member_id}";
+            var command = new SQLiteCommand(sqlCommand, connection);
+
+            connection.Open();
+
+            SQLiteDataReader dataReader = command.ExecuteReader();
+            string position = null;
+            while (dataReader.Read())
+            {
+                position = dataReader[0].ToString();
+            }
+
+            connection.Close();
+
+            return position;
+        }
+
         public static void DeleteMember(Member member)
         {
             var connection = new SQLiteConnection(ConnectionString.connectionString);
@@ -197,7 +217,7 @@ namespace Biblioteka
                 delete would look like:
                 command.CommandText = $"DELETE FROM members where PESEL={member.pesel_number}";
                 but this can ruin our database if we delete member who has book actually*/
-                command.CommandText = $"UPDATE members SET updated_at=@updated_at, deleted_at=@deleted_at where PESEL=@PESEL";
+                command.CommandText = $"UPDATE members SET updated_at=@updated_at, deleted_at=@deleted_at WHERE PESEL=@PESEL";
                 command.Parameters.AddWithValue("@PESEL", member.pesel_number);
                 command.Parameters.AddWithValue("@deleted_at", DateTime.Now.ToString());
                 command.Parameters.AddWithValue("@updated_at", DateTime.Now.ToString());
@@ -241,7 +261,7 @@ namespace Biblioteka
         public static string GetMemberID(Member member)
         {
             var connection = new SQLiteConnection(ConnectionString.connectionString);
-            string sqlCommand = $"SELECT id FROM members where PESEL=@PESEL";
+            string sqlCommand = $"SELECT id FROM members WHERE PESEL=@PESEL";
 
             var command = new SQLiteCommand(sqlCommand, connection);
 
