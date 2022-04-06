@@ -29,7 +29,7 @@ namespace LibraryProject
         /// </summary>
         private void InitializeComponent()
         {
-            this.UsersManagement = new System.Windows.Forms.Button();
+            this.menuButton = new System.Windows.Forms.Button();
             this.usersTable = new System.Windows.Forms.DataGridView();
             this.id = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pesel = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -49,18 +49,21 @@ namespace LibraryProject
             this.addMemberButton = new System.Windows.Forms.Button();
             this.updateMemberButton = new System.Windows.Forms.Button();
             this.deleteMemberButton = new System.Windows.Forms.Button();
+            this.searchButton = new System.Windows.Forms.Button();
+            this.searchBox = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.usersTable)).BeginInit();
             this.SuspendLayout();
             // 
-            // UsersManagement
+            // menuButton
             // 
-            this.UsersManagement.Location = new System.Drawing.Point(759, 550);
-            this.UsersManagement.Name = "UsersManagement";
-            this.UsersManagement.Size = new System.Drawing.Size(170, 70);
-            this.UsersManagement.TabIndex = 1;
-            this.UsersManagement.Text = "Menu";
-            this.UsersManagement.UseVisualStyleBackColor = true;
-            this.UsersManagement.Click += new System.EventHandler(this.Menu_Click);
+            this.menuButton.Location = new System.Drawing.Point(800, 571);
+            this.menuButton.Name = "menuButton";
+            this.menuButton.Size = new System.Drawing.Size(170, 70);
+            this.menuButton.TabIndex = 1;
+            this.menuButton.Text = "Menu";
+            this.menuButton.UseVisualStyleBackColor = true;
+            this.menuButton.Click += new System.EventHandler(this.Menu_Click);
             // 
             // usersTable
             // 
@@ -79,12 +82,14 @@ namespace LibraryProject
             this.usersTable.Location = new System.Drawing.Point(12, 12);
             this.usersTable.MultiSelect = false;
             this.usersTable.Name = "usersTable";
+            this.usersTable.ReadOnly = true;
             this.usersTable.RowHeadersWidth = 51;
             this.usersTable.RowTemplate.Height = 24;
             this.usersTable.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.usersTable.Size = new System.Drawing.Size(917, 331);
+            this.usersTable.Size = new System.Drawing.Size(958, 365);
             this.usersTable.TabIndex = 2;
             this.usersTable.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.selectMember);
+            this.usersTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.usersTable_CellContentClick);
             // 
             // id
             // 
@@ -139,7 +144,7 @@ namespace LibraryProject
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label1.Location = new System.Drawing.Point(12, 362);
+            this.label1.Location = new System.Drawing.Point(12, 397);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(63, 20);
             this.label1.TabIndex = 3;
@@ -149,7 +154,7 @@ namespace LibraryProject
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label2.Location = new System.Drawing.Point(12, 401);
+            this.label2.Location = new System.Drawing.Point(12, 436);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(68, 20);
             this.label2.TabIndex = 4;
@@ -159,7 +164,7 @@ namespace LibraryProject
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label3.Location = new System.Drawing.Point(12, 438);
+            this.label3.Location = new System.Drawing.Point(12, 473);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(40, 20);
             this.label3.TabIndex = 5;
@@ -169,7 +174,7 @@ namespace LibraryProject
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.label4.Location = new System.Drawing.Point(12, 476);
+            this.label4.Location = new System.Drawing.Point(12, 511);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(81, 20);
             this.label4.TabIndex = 6;
@@ -178,7 +183,7 @@ namespace LibraryProject
             // peselTextBox
             // 
             this.peselTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.peselTextBox.Location = new System.Drawing.Point(149, 362);
+            this.peselTextBox.Location = new System.Drawing.Point(126, 397);
             this.peselTextBox.Name = "peselTextBox";
             this.peselTextBox.Size = new System.Drawing.Size(165, 26);
             this.peselTextBox.TabIndex = 7;
@@ -186,7 +191,7 @@ namespace LibraryProject
             // firstNameTextBox
             // 
             this.firstNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.firstNameTextBox.Location = new System.Drawing.Point(149, 438);
+            this.firstNameTextBox.Location = new System.Drawing.Point(126, 473);
             this.firstNameTextBox.Name = "firstNameTextBox";
             this.firstNameTextBox.Size = new System.Drawing.Size(165, 26);
             this.firstNameTextBox.TabIndex = 9;
@@ -194,7 +199,7 @@ namespace LibraryProject
             // lastNameTextBox
             // 
             this.lastNameTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
-            this.lastNameTextBox.Location = new System.Drawing.Point(149, 476);
+            this.lastNameTextBox.Location = new System.Drawing.Point(126, 511);
             this.lastNameTextBox.Name = "lastNameTextBox";
             this.lastNameTextBox.Size = new System.Drawing.Size(165, 26);
             this.lastNameTextBox.TabIndex = 10;
@@ -207,14 +212,14 @@ namespace LibraryProject
             "Student",
             "Wykładowca",
             "Pracownik"});
-            this.positionComboBox.Location = new System.Drawing.Point(149, 401);
+            this.positionComboBox.Location = new System.Drawing.Point(126, 436);
             this.positionComboBox.Name = "positionComboBox";
             this.positionComboBox.Size = new System.Drawing.Size(165, 28);
             this.positionComboBox.TabIndex = 11;
             // 
             // addMemberButton
             // 
-            this.addMemberButton.Location = new System.Drawing.Point(385, 361);
+            this.addMemberButton.Location = new System.Drawing.Point(342, 397);
             this.addMemberButton.Name = "addMemberButton";
             this.addMemberButton.Size = new System.Drawing.Size(170, 70);
             this.addMemberButton.TabIndex = 12;
@@ -224,7 +229,7 @@ namespace LibraryProject
             // 
             // updateMemberButton
             // 
-            this.updateMemberButton.Location = new System.Drawing.Point(385, 448);
+            this.updateMemberButton.Location = new System.Drawing.Point(342, 484);
             this.updateMemberButton.Name = "updateMemberButton";
             this.updateMemberButton.Size = new System.Drawing.Size(170, 70);
             this.updateMemberButton.TabIndex = 13;
@@ -234,7 +239,7 @@ namespace LibraryProject
             // 
             // deleteMemberButton
             // 
-            this.deleteMemberButton.Location = new System.Drawing.Point(385, 535);
+            this.deleteMemberButton.Location = new System.Drawing.Point(342, 571);
             this.deleteMemberButton.Name = "deleteMemberButton";
             this.deleteMemberButton.Size = new System.Drawing.Size(170, 70);
             this.deleteMemberButton.TabIndex = 14;
@@ -242,10 +247,41 @@ namespace LibraryProject
             this.deleteMemberButton.UseVisualStyleBackColor = true;
             this.deleteMemberButton.Click += new System.EventHandler(this.deleteMemberButton_Click);
             // 
+            // searchButton
+            // 
+            this.searchButton.Location = new System.Drawing.Point(800, 397);
+            this.searchButton.Name = "searchButton";
+            this.searchButton.Size = new System.Drawing.Size(170, 70);
+            this.searchButton.TabIndex = 17;
+            this.searchButton.Text = "Wyszukaj";
+            this.searchButton.UseVisualStyleBackColor = true;
+            this.searchButton.Click += new System.EventHandler(this.searchButton_Click);
+            // 
+            // searchBox
+            // 
+            this.searchBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.searchBox.Location = new System.Drawing.Point(596, 416);
+            this.searchBox.Name = "searchBox";
+            this.searchBox.Size = new System.Drawing.Size(165, 26);
+            this.searchBox.TabIndex = 16;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(238)));
+            this.label5.Location = new System.Drawing.Point(618, 393);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(120, 20);
+            this.label5.TabIndex = 15;
+            this.label5.Text = "Wyszukiwanie:";
+            // 
             // UsersManagementForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(941, 632);
+            this.ClientSize = new System.Drawing.Size(982, 653);
+            this.Controls.Add(this.searchButton);
+            this.Controls.Add(this.searchBox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.deleteMemberButton);
             this.Controls.Add(this.updateMemberButton);
             this.Controls.Add(this.addMemberButton);
@@ -258,7 +294,7 @@ namespace LibraryProject
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.usersTable);
-            this.Controls.Add(this.UsersManagement);
+            this.Controls.Add(this.menuButton);
             this.Name = "UsersManagementForm";
             this.Text = "Biblioteka - zarządzanie czytelnikami";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.UsersManagementForm_FormClosing);
@@ -271,7 +307,7 @@ namespace LibraryProject
 
         #endregion
 
-        private System.Windows.Forms.Button UsersManagement;
+        private System.Windows.Forms.Button menuButton;
         private System.Windows.Forms.DataGridView usersTable;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -291,5 +327,8 @@ namespace LibraryProject
         private System.Windows.Forms.DataGridViewTextBoxColumn updated_at;
         private System.Windows.Forms.Button updateMemberButton;
         private System.Windows.Forms.Button deleteMemberButton;
+        private System.Windows.Forms.Button searchButton;
+        private System.Windows.Forms.TextBox searchBox;
+        private System.Windows.Forms.Label label5;
     }
 }

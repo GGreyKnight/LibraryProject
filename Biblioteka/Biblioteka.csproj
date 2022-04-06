@@ -47,7 +47,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Biblioteka.cs" />
+    <Compile Include="BorrowBook.cs" />
+    <Compile Include="Member.cs" />
+    <Compile Include="Book.cs" />
+    <Compile Include="ConnectionString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

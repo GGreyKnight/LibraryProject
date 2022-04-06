@@ -43,7 +43,7 @@ namespace LibraryProject
             }
             catch (Exception)
             {
-                MessageBox.Show("Błędne dane! Proszę uzupełnić PESEL użytkownika.");
+                MessageBox.Show("Błędne dane! Proszę poprawnie uzupełnić PESEL użytkownika.");
             }
             Member.ShowMembers(usersTable);
         }
@@ -57,7 +57,7 @@ namespace LibraryProject
             }
             catch (Exception)
             {
-                MessageBox.Show("Błędne dane! Proszę uzupełnić PESEL użytkownika.");
+                MessageBox.Show("Błędne dane! Proszę poprawnie uzupełnić PESEL użytkownika.");
             }
             Member.ShowMembers(usersTable);
         }
@@ -71,7 +71,7 @@ namespace LibraryProject
             }
             catch (Exception)
             {
-                MessageBox.Show("Błędne dane! Proszę uzupełnić PESEL użytkownika.");
+                MessageBox.Show("Błędne dane! Proszę poprawnie uzupełnić PESEL użytkownika.");
             }
             Member.ShowMembers(usersTable);
         }
@@ -93,6 +93,16 @@ namespace LibraryProject
             {
                 return;
             }
+        }
+
+        private void searchButton_Click(object sender, EventArgs e)
+        {
+            Member.SearchMembers(usersTable, searchBox.Text);
+        }
+
+        private void usersTable_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
     }
 }
